@@ -1,0 +1,17 @@
+#!/usr/bin/ruby
+
+require 'htmon/agent'
+
+Conf = Struct.new(:api, :config).new
+
+ARGV.each.with_index do |argument,i|
+  case argument
+  when '--api' then Conf.api = ARGV[i+1]
+  when '--config' then Conf.config = ARGV[i+1]
+  end
+end
+
+ENV['htmon_api'] = Conf.api if Conf.api
+abort("config missing") unless Conf.config
+
+Htmon::Agent.start(config: Conf.config)
