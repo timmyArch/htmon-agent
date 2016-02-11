@@ -44,6 +44,26 @@ schema["htmon_processes"].to_a.each do |process|
 end
 ```
 
+Sample service file: 
+
+```bash
+>>> systemctl cat htmon-agent
+
+# /etc/systemd/system/htmon-agent.service
+[Unit]
+Description=Htmon Agent
+After=network-online.target
+
+[Service]
+User=root
+ExecStart=/usr/bin/htmon-agent --config /etc/htmon-agent.conf --api http://test:moo@rails.moo.gl:3000
+RestartSec=60
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/timmyArch/htmon-agent.
