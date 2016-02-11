@@ -29,11 +29,13 @@ The binary will create a loop, with should started by using systemd or any other
 The config could looks like the following snipped.
 
 ```ruby
+schema = load_schema
+
 check interval: 2.seconds do |url| 
   push url: :keepalive, expires_after: 10.seconds
 end
 
-%w{nginx apache2 sshd mysqld nspawn}.each do |process|
+schema["htmon_processes"].to_a.each do |process|
   check interval: 1.minute do |url| 
     push metric: "process::#{process}", 
       expires_after: 2.minutes, 
