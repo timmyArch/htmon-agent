@@ -45,7 +45,7 @@ def check interval: 60, &block
   Htmon::Agent.checks << Htmon::Agent::Check.new(block, interval)
 end
 
-def load_schema hostname: `hostname`
+def load_schema hostname: `hostname`.strip
   JSON.parse RestClient.get(Htmon::Agent.remote+
                             "schema?"+({hostname: hostname}).to_param)
 end
