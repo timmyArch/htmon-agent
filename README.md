@@ -42,6 +42,20 @@ schema["htmon_processes"].to_a.each do |process|
       value: `pgrep -fla #{process.inspect} | grep -v pgrep | wc -l`.strip
   end
 end
+
+check interval: 10.seconds do |url| 
+	# load should be ',' seperated
+  push metric: "load",
+    value: File.read('/proc/loadavg').split[0..2].join(','), 
+    expires_after: 50.seconds
+end
+
+check interval: 5.minutes do |url| 
+  push metric: "packages",
+    value: `pacman -Syup | grep 'pkg.tar.xz' -c`.to_i,
+    expires_after: 30.minutes
+end
+
 ```
 
 Sample service file: 
